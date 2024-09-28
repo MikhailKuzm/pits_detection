@@ -5,3 +5,5 @@ seg_dataset
 *.txt
 *.deb
 *.ckpt
+__pycache__
+*.pyc
