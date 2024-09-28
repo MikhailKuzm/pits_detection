@@ -1,0 +1,10 @@
+_target_: pytorch_lightning.Trainer
+accelerator: ${params.accelerator}
+max_epochs: ${params.max_epochs}
+callbacks: ${callbacks}
+logger: ${params.logger}
+strategy: 'ddp_notebook'
+enable_progress_bar: True
+log_every_n_steps: ${params.log_every_n_steps}
+devices: ${params.devices}
+default_root_dir: logs/UNet_simple

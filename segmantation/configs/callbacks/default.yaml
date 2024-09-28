@@ -1,0 +1,2 @@
+callbacks:
+  - ${model_checkpoint}

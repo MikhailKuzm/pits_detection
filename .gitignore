@@ -1,0 +1,7 @@
+seg_dataset
+*.png
+*.jpg
+*.pth
+*.txt
+*.deb
+*.ckpt

@@ -1,0 +1,5 @@
+_target_: pytorch_lightning.callbacks.ModelCheckpoint
+dirpath: ${params.checkpoint_path}
+save_top_k: 3
+monitor: Loss_valid
+filename: check-{epoch:02d}-{Loss_valid:.2f}-{Accuracy_valid:.2f} 
