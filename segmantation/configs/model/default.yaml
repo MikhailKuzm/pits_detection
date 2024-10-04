@@ -1,4 +1,4 @@
-_target_: segmantation.model.model.SegModel
+_target_: model.model.SegModel
 image_path: ${params.image_path}
 mask_path: ${params.mask_path}
 train_ratio: ${params.train_ratio}

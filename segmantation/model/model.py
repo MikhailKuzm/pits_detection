@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 class SegModel(pl.LightningModule):
 
     def __init__(self, image_path, mask_path, train_ratio,  num_workers, batch_size, net):
-        super().__init__() 
+        super(SegModel, self).__init__() 
         self.num_workers = num_workers
         self.batch_size = batch_size
         self.trn_ds = SegData(image_path = image_path, mask_path = mask_path, train_ratio = train_ratio,  mode = 'train', seed = 1)

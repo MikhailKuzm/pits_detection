@@ -7,3 +7,6 @@ seg_dataset
 *.ckpt
 __pycache__
 *.pyc
+outputs
+*.csv
+metrics.csv

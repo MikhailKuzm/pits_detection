@@ -1,2 +1,6 @@
-model: ${model}
-trainer: ${trainer}
+defaults: 
+  - model: default
+  - trainer: default
+  - params: default
+  - callbacks: default
+  - net: simple_unet 

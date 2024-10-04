@@ -1,9 +1,15 @@
 _target_: pytorch_lightning.Trainer
 accelerator: ${params.accelerator}
 max_epochs: ${params.max_epochs}
-callbacks: ${callbacks}
-logger: ${params.logger}
+logger:
+  _target_: pytorch_lightning.loggers.CSVLogger
+  save_dir: logs/UNet_simple
+  name: simple_UNet
+  flush_logs_every_n_steps: 5
 strategy: 'ddp_notebook'
+callbacks: 
+  - ${early_stopping}
+  - ${model_checkpoint}
 enable_progress_bar: True
 log_every_n_steps: ${params.log_every_n_steps}
 devices: ${params.devices}
