@@ -1,0 +1,4 @@
+_target_: nets.SegNet.SegNet
+pretrained: True
+num_classes: 1
+in_channels: 3

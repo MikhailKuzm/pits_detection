@@ -6,12 +6,14 @@ from torch.utils.data import DataLoader
 
 class SegModel(pl.LightningModule):
 
-    def __init__(self, image_path, mask_path, train_ratio,  num_workers, batch_size, net):
+    def __init__(self, image_path, mask_path, train_ratio,  num_workers, batch_size, net, img_size):
         super(SegModel, self).__init__() 
         self.num_workers = num_workers
-        self.batch_size = batch_size
-        self.trn_ds = SegData(image_path = image_path, mask_path = mask_path, train_ratio = train_ratio,  mode = 'train', seed = 1)
-        self.val_ds = SegData(image_path = image_path, mask_path = mask_path, train_ratio = train_ratio,  mode = 'test', seed = 1)
+        self.batch_size = batch_size 
+        self.trn_ds = SegData(image_path = image_path, mask_path = mask_path, train_ratio = train_ratio, 
+                              mode = 'train', seed = 1, size = img_size)
+        self.val_ds = SegData(image_path = image_path, mask_path = mask_path, train_ratio = train_ratio,
+                              mode = 'test', seed = 1,  size = img_size)
         #self.train_dataloader = DataLoader(trn_ds, batch_size=4, shuffle=True, collate_fn=trn_ds.collate_fn)
        # self.test_dataloader = DataLoader(val_ds, batch_size=1, shuffle=False, collate_fn=val_ds.collate_fn)
         
@@ -20,28 +22,19 @@ class SegModel(pl.LightningModule):
         
         
     def training_step(self, batch):
-        return self.shared_step(batch, "train")            
-
-    #def on_train_epoch_end(self, outputs):
-    #    return self.shared_epoch_end(outputs, "train")
+        return self.shared_step(batch, "train")             
 
     def validation_step(self, batch):
-        return self.shared_step(batch, "valid")
-
-    #def on_validation_epoch_end(self, outputs):
-    #    return self.shared_epoch_end(outputs, "valid")
+        return self.shared_step(batch, "valid") 
 
     def test_step(self, batch, batch_idx):
-        return self.shared_step(batch, "test")  
-
-    #def on_test_epoch_end(self, outputs):
-    #    return self.shared_epoch_end(outputs, "test")
+        return self.shared_step(batch, "test")   
  
 
     def shared_step(self, batch, stage):
         
         image, true_mask = batch
-        logits_mask = self.net(image).squeeze(1)
+        logits_mask = self.net(image) 
         loss = self.loss_fn(logits_mask.float(), true_mask.float()) 
         acc = (logits_mask.round() == true_mask).sum().item()/(self.batch_size*224*224)
         

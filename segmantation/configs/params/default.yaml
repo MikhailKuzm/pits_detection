@@ -8,6 +8,7 @@ checkpoint_path: logs/UNet_simple/checkpoints
 image_path: ../seg_dataset/images
 mask_path: ../seg_dataset/maps_roads
 log_every_n_steps: 100
+img_size: 224
 devices:
   - 0
   - 1

@@ -9,9 +9,10 @@ from sklearn.model_selection import train_test_split
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class SegData(Dataset):
-    def __init__(self, image_path, mask_path, train_ratio = 0.9,  mode = 'train', seed = 1):
+    def __init__(self, image_path, mask_path, size, train_ratio = 0.9,  mode = 'train', seed = 1):
         self.image_path = image_path #путь к изображениям 
         self.mask_path = mask_path
+        self.size = size
         files = np.array(os.listdir(image_path)) #список всех изображений
         
         np.random.seed(seed)
@@ -32,7 +33,7 @@ class SegData(Dataset):
     def __getitem__(self, ix):
         image = cv2.imread(f'{self.image_path}/{self.items[ix]}', 1) #загружаем изображение
         
-        image = cv2.resize(image, (224,224))
+        image = cv2.resize(image, (self.size,self.size))
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) #трансформируем BGR to RGB
        # image = np.transpose(image, (2, 0, 1)) # [channels, width, height] 
         

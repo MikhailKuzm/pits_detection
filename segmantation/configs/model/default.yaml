@@ -5,4 +5,5 @@ train_ratio: ${params.train_ratio}
 num_workers: ${params.num_workers}
 batch_size: ${params.batch_size}
 net: ${net}
+img_size: ${params.img_size}
  

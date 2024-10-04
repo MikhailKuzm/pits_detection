@@ -73,7 +73,7 @@ class UNet(nn.Module):
         x = self.conv10(x)
 
         x = self.conv11(x)
-        x = self.sig(x)
+        x = self.sig(x).squeeze(1)
 
         return x
     

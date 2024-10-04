@@ -1,0 +1,17 @@
+defaults:
+  - model: default
+  - trainer: default
+  - params: default
+  - callbacks: default
+  - net: segnet 
+
+params:
+  checkpoint_path: logs/SegNet/checkpoints
+trainer: 
+  default_root_dir: logs/SegNet
+  logger:
+    _target_: pytorch_lightning.loggers.CSVLogger
+    save_dir: logs/SegNet
+    name: simple_SegNet
+    flush_logs_every_n_steps: 5
+ 

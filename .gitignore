@@ -10,3 +10,4 @@ __pycache__
 outputs
 *.csv
 metrics.csv
+hparams.yaml
