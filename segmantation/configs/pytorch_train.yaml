@@ -1,0 +1,17 @@
+defaults:
+  - _self_
+  - model@model: pytorch_build_model
+  - trainer: default
+  - params: default
+  - callbacks: default
+  
+
+params:
+  checkpoint_path: logs/FPN/checkpoints
+trainer: 
+  default_root_dir: logs/FPN
+  logger:
+    _target_: pytorch_lightning.loggers.CSVLogger
+    save_dir: logs/FPN
+    name: ResNet
+    flush_logs_every_n_steps: 5  

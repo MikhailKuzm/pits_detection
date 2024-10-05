@@ -1,0 +1,15 @@
+# @package pytorch_build_model
+
+_target_: model.pytorch_model.PytorchModel
+image_path: ${params.image_path}
+mask_path: ${params.mask_path}
+train_ratio: ${params.train_ratio}
+num_workers: ${params.num_workers}
+batch_size: ${params.batch_size} 
+img_size: ${params.img_size}
+architecture: FPN
+encoder_name: resnet34
+in_channels: 3
+out_classes: 1
+max_epoch: ${params.max_epochs}
+ 

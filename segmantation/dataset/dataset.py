@@ -23,8 +23,7 @@ class SegData(Dataset):
             self.items = files[~np.isin(np.arange(len(files)), train_indx)]  #список имён изображений для test
          
         self.tfms = transforms.Compose([
-                            transforms.ToTensor(),
-                            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # imagenet
+                            transforms.ToTensor()
                         ]) #преобразование изображения в тензор и номрализация
         
     def __len__(self):
@@ -38,7 +37,7 @@ class SegData(Dataset):
        # image = np.transpose(image, (2, 0, 1)) # [channels, width, height] 
         
         mask = cv2.imread(f'{self.mask_path}/{self.items[ix][:-3]}png', 0) #загружаем маску 
-        mask = cv2.resize(mask, (224,224))
+        mask = cv2.resize(mask, (self.size,self.size))
         
         return image, mask
     

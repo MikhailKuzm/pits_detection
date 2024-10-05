@@ -4,6 +4,7 @@ defaults:
   - params: default
   - callbacks: default
   - net: segnet 
+  - _self_
 
 params:
   checkpoint_path: logs/SegNet/checkpoints
@@ -14,4 +15,5 @@ trainer:
     save_dir: logs/SegNet
     name: simple_SegNet
     flush_logs_every_n_steps: 5
+  
  
