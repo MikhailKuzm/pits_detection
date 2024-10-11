@@ -7,11 +7,11 @@ defaults:
   
 
 params:
-  checkpoint_path: logs/FPN/checkpoints
+  checkpoint_path: logs/DeepLabV3/checkpoints
 trainer: 
-  default_root_dir: logs/FPN
+  default_root_dir: logs/DeepLabV3
   logger:
     _target_: pytorch_lightning.loggers.CSVLogger
-    save_dir: logs/FPN
-    name: ResNet
+    save_dir: logs/DeepLabV3
+    name: resnet34
     flush_logs_every_n_steps: 5  
