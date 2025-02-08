@@ -1,0 +1,6 @@
+epochs: 10
+accelerator: "gpu"
+devices: 1
+log_steps: 5
+log_dir: "logs/${model.name}"  # Логи для каждой модели
+save_checkpoints: true  # Флаг для сохранения чекпоинтов
