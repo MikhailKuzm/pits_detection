@@ -1,2 +1,2 @@
-root_dir: "D:/study/pits_detection/detection/data/potholes"
-batch_size: 4
+root_dir: "D:\\study\\pits_detection\\detection\\data"
+batch_size: 32

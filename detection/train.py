@@ -7,16 +7,9 @@ import os
 sys.path.append('detection')
 from dataset import get_dataloaders
 from detection_model import ObjectDetectionModel
-
-#import hydra
-#from omegaconf import OmegaConf
-#config = OmegaConf.load("detection\\configs\\train.yaml")
-#cfg = config
-# Выводим текущий конфиг
-#print("📌 Исходный конфиг:")
-#print(OmegaConf.to_yaml(config))
-
-
+os.chdir('detection')
+import torch
+print(torch.cuda.is_available())
 
  
 @hydra.main(version_base=None, config_path='configs', config_name="train")

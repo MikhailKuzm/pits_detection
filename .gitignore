@@ -1,12 +1,16 @@
 seg_dataset
 *.png
 *.pth
+*.jpg
+*.xml
 *.txt
 *.deb
 *.ckpt
 __pycache__
 *.pyc
 outputs
+.venv
 *.csv
 metrics.csv
 hparams.yaml
+tmp

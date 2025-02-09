@@ -6,7 +6,7 @@ import numpy as np
 import torchvision.transforms as T
 import matplotlib.pyplot as plt
 from omegaconf import DictConfig
-from model import ObjectDetectionModel
+from detection.detection_model import ObjectDetectionModel
 
 
 def load_best_checkpoint(model_name: str):
