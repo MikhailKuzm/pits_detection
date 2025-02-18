@@ -1,3 +1,3 @@
-name: "mask_rcnn"  # Выбор модели: mask_rcnn, ssd300
+name: "yolo"  # Выбор модели: mask_rcnn, ssd300, yolo
 num_classes: 2  # Количество классов + 1 (фон)
 lr: 0.0001

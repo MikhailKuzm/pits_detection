@@ -1,0 +1,7 @@
+path: /home/user/master_degree/pits_detection/detection/data/yolo_format # dataset root dir (absolute or relative; if relative, it's relative to default datasets_dir)
+train: images/train # train images (relative to 'path') 4 images
+val: images/val # val images (relative to 'path') 4 images
+ns: 2
+
+names:
+  0: pothole

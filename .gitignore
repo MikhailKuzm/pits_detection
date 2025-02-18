@@ -5,7 +5,11 @@ seg_dataset
 *.xml
 *.txt
 *.deb
+*.pt
 *.ckpt
+*.webp
+*.mp4
+*.cache
 __pycache__
 *.pyc
 outputs

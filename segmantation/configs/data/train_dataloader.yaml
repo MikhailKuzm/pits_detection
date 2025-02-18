@@ -1,0 +1,13 @@
+train_dataloader:
+  _target_: torch.utils.data.DataLoader
+  dataset:
+    _target_: dataset.pytorch_dataset.PytData
+    image_path: "../seg_dataset/images_train"
+    mask_path: "../seg_dataset/masks_train"
+    size: ${params.img_size}
+    augmentation:
+      _target_: dataset.pytorch_dataset.get_training_augmentation 
+  batch_size:  ${params.batch_size}
+  shuffle: True
+  num_workers: ${params.num_workers}
+  pin_memory: True

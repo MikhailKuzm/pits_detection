@@ -108,8 +108,8 @@ def replace_class_in_labels(label_dir):
             updated_lines = []
             for line in lines:
                 parts = line.strip().split()
-                if parts and parts[0] == "0":  # Если класс 0
-                    parts[0] = "1"  # Меняем на 1
+                if parts and parts[0] == "1":  # Если класс 0
+                    parts[0] = "0"  # Меняем на 1
                 updated_lines.append(" ".join(parts))  # Объединяем обратно
 
             # Записываем обратно в файл
@@ -119,7 +119,29 @@ def replace_class_in_labels(label_dir):
             print(f"✅ Обновлён файл: {file_path}")
 
 # 📌 Заменяем классы в папках train/labels и valid/labels
-replace_class_in_labels("detection/data/train/labels")
-replace_class_in_labels("detection/data/valid/labels")
+replace_class_in_labels("detection/data/yolo_format/labels/train")
+replace_class_in_labels("detection/data/yolo_format/labels/val")
 
 print("🎯 Все классы 0 заменены на 1!")
+
+
+
+import os
+
+# Пути к папкам
+image_dir = "detection/data/train/images"
+label_dir = "detection/data/train/labels"
+
+# Получаем список изображений без расширений
+image_names = {os.path.splitext(f)[0] for f in os.listdir(image_dir) if f.endswith((".jpg", ".png", ".jpeg"))}
+
+# Проверяем файлы в папке labels
+for label_file in os.listdir(label_dir):
+    label_name, ext = os.path.splitext(label_file)
+
+    # Если файл .txt, но нет соответствующего изображения — удаляем
+    if ext == ".txt" and label_name not in image_names:
+        os.remove(os.path.join(label_dir, label_file))
+        print(f"Удалён: {label_file}")
+
+print("Очистка завершена.")

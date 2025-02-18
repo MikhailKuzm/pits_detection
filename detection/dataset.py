@@ -3,14 +3,13 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as T
 from PIL import Image
-from torchvision.transforms.functional import to_pil_image
-from torchvision import transforms
+from torchvision.transforms.functional import to_pil_image 
 
 class PotholeDataset(Dataset):
     def __init__(self, image_dir, label_dir):
         self.image_dir = image_dir
         self.label_dir = label_dir
-        self.to_tensor = transforms.ToTensor()
+        self.to_tensor = T.ToTensor()
         # Получаем список всех изображений (фильтруем по .jpg)
         self.image_files = [f for f in os.listdir(image_dir) if f.endswith(".jpg")]
 
@@ -46,7 +45,7 @@ class PotholeDataset(Dataset):
 
                 boxes.append([x_min, y_min, x_max, y_max])
                 #boxes.append([x_center, y_center, width, height])
-                labels.append(class_id)
+                labels.append(class_id) 
 
         # Преобразуем в тензоры
         boxes = torch.tensor(boxes, dtype=torch.float32)
@@ -68,116 +67,18 @@ def get_dataloaders(root_dir, batch_size=8):
     valid_dataset = PotholeDataset(valid_img_dir, valid_lbl_dir)
 
     # Создаём DataLoader
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True,  collate_fn=lambda x: tuple(zip(*x)))
-    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False, collate_fn=lambda x: tuple(zip(*x)))
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, num_workers=64, shuffle=True,  collate_fn=lambda x: tuple(zip(*x)))
+    valid_loader = DataLoader(valid_dataset, batch_size=batch_size, num_workers=64, shuffle=False, collate_fn=lambda x: tuple(zip(*x)))
 
     return train_loader, valid_loader
 
 
+#import os
+#os.chdir('detection')
+#train_loader, valid_loader = get_dataloaders(root_dir = 'data') 
+#batch = next(iter(train_loader))
+#batch[1][0]['boxes']
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-######################
-import os
-import torch
-import numpy as np
-from PIL import Image, ImageDraw, ImageFont
-
-
-def draw_bounding_boxes(images, targets, save_dir="tmp"):
-    """
-    Отрисовывает bounding boxes на изображениях и сохраняет результат, используя PIL.
-    
-    :param images: Список тензоров изображений (batch)
-    :param targets: Список словарей с аннотациями (bounding boxes и labels)
-    :param save_dir: Папка для сохранения изображений
-    """
-    os.makedirs(save_dir, exist_ok=True)  # ✅ Создаём папку, если её нет
-
-    for i, (image, target) in enumerate(zip(images, targets)):
-        # ✅ Преобразуем PyTorch Tensor в NumPy (если это не NumPy)
-        if isinstance(image, torch.Tensor):
-            image = image.cpu().detach().numpy()
-
-        # ✅ Если изображение в формате `[C, H, W]`, меняем оси на `[H, W, C]`
-        if image.shape[0] == 3:  # Каналы в первом измерении (C, H, W)
-            image = np.transpose(image, (1, 2, 0))
-
-        # ✅ Приводим значения в диапазон [0, 255] и делаем `uint8`
-        image = (image * 255).astype(np.uint8)
-
-        # ✅ Создаём объект изображения в PIL
-        pil_image = Image.fromarray(image)
-
-        # ✅ Создаём объект для рисования
-        draw = ImageDraw.Draw(pil_image)
-
-        # ✅ Получаем bounding boxes и метки
-        boxes = target["boxes"].cpu().numpy()
-        labels = target["labels"].cpu().numpy()
-
-        # ✅ Отрисовываем bounding boxes
-        for box, label in zip(boxes, labels):
-            x_min, y_min, x_max, y_max = box
-            #x_center, y_center, width, height = box
-            #x_min = (x_center - width / 2) * image.shape[1]
-            #y_min = (y_center - height / 2) * image.shape[0]
-            #x_max = (x_center + width / 2) * image.shape[1]
-            #y_max = (y_center + height / 2) * image.shape[0]
-            print([x_min, y_min, x_max, y_max])
-            draw.rectangle([x_min, y_min, x_max, y_max], outline="green", width=5)
-            draw.text((x_min, y_min - 10), f"Class {label}", fill="green")
-
-        # ✅ Сохраняем изображение
-        save_path = os.path.join(save_dir, f"annotated_{i}.jpg")
-        pil_image.save(save_path)
-        print(f"✅ Изображение сохранено: {save_path}")
-
-
-# 📌 Пример использования
-train_loader, valid_loader = get_dataloaders(root_dir="D:\\study\\pits_detection\\detection\\data")
-
-# Получаем batch
-tmp = next(iter(train_loader))
-images, targets = tmp[0], tmp[1]
-
-# Отрисовываем боксы и сохраняем изображения
-draw_bounding_boxes(images, targets)
-
-
-# Получаем batch
-tmp = next(iter(train_loader))
-images, targets = tmp[0], tmp[1]
-
-img = images[0]
-from PIL import Image
-from torchvision.transforms.functional import to_pil_image
-pil_img = to_pil_image(img)
-pil_img.save(r'detection\tmp\tmp.jpg')
-
-
-
-# Отрисовываем боксы и сохраняем изображения
-draw_bounding_boxes(images, targets)
-
+#for item in batch[1]:
+ #   ones_column = torch.ones((item['boxes'].shape[0], 1))
+  #  item['boxes'] = torch.cat(( item['boxes'], ones_column), dim=1) 

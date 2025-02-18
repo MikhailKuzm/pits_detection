@@ -1,7 +1,8 @@
 # @package model_checkpoint
-
 _target_: pytorch_lightning.callbacks.ModelCheckpoint
 dirpath: ${params.checkpoint_path}
 save_top_k: 3
 monitor: Loss_valid
-filename: check-{epoch:02d}-{Loss_valid:.2f}-{Accuracy_valid:.2f} 
+mode: min  # Нам нужна минимальная потеря
+save_last: True  # Всегда сохранять последний чекпоинт
+filename: check-{epoch:02d}-{Loss_valid:.4f}  # Убрали Accuracy_valid, т.к. он не логируется
