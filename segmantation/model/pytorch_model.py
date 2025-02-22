@@ -70,6 +70,14 @@ class PytorchModel(pl.LightningModule):
         per_image_iou = smp.metrics.iou_score(tp, fp, fn, tn, reduction="micro-imagewise")
         dataset_iou = smp.metrics.iou_score(tp, fp, fn, tn, reduction="micro")
 
+        # Calculate the average  loss over the entire   set
+        if stage == 'train':
+            avg_loss = torch.stack([x["loss"] for x in self.training_step_outputs]).mean()
+        elif stage == 'valid':
+            avg_loss = torch.stack([x["loss"] for x in self.validation_step_outputs]).mean()
+        
+        # Log the average loss
+        self.log(f'Loss_{stage}', avg_loss, prog_bar=True, on_epoch=True) 
         self.log(f"{stage}_per_image_iou", per_image_iou, prog_bar=True, on_epoch=True)
         self.log(f"{stage}_dataset_iou", dataset_iou, prog_bar=True, on_epoch=True)
 
@@ -88,7 +96,7 @@ class PytorchModel(pl.LightningModule):
         self.validation_step_outputs.append(valid_loss_info)
         return valid_loss_info
 
-    def on_validation_epoch_end(self):
+    def on_validation_epoch_end(self): 
         self.shared_epoch_end(self.validation_step_outputs, "valid") 
         self.validation_step_outputs.clear() 
 

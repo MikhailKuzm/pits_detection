@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детектор ям на дорогах</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div id="content-container">
+        <h1>Детектор ям на дорогах</h1>
+        <form id="video-form" enctype="multipart/form-data">
+            <input type="file" id="video-file" name="file" accept="video/*">
+            <button type="submit">Загрузить видео</button>
+        </form>
+        <div id="status"></div> 
+
+        <!-- Прогресс бар -->
+        <div id="progress-container" style="display:none;">
+            <p id="progress-text">Обработка видео...</p>
+            <progress id="progress-bar" value="0" max="100" style="width: 100%;"></progress>
+        </div>
+
+        <!-- Место для видео -->
+        <div id="video-container">
+            <video id="video-player" controls>
+                <source id="video-source" type="video/mp4" src="{{ url_for('static', filename='default_video/42.mp4') }}">
+                Ваш браузер не поддерживает элемент video.
+            </video>
+            <!-- <p id="loading-text">Здесь будет загруженное видео</p> -->
+        </div>
+    </div>
+
+    <!-- Подключение SocketIO -->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+    <script>
+        // Подключение к серверу через сокеты
+        const socket = io.connect("http://185.105.89.88:8080");
+    
+        // Получение элемента для отображения видео
+        const videoPlayer = document.getElementById("video-player");
+        const videoSource = document.getElementById("video-source");
+        const progressContainer = document.getElementById("progress-container");
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-text");
+    
+        // Слушаем событие "progress" от сокета и обновляем прогресс на клиенте
+        socket.on("progress", function(data) {
+            const progress = data.progress;
+            progressBar.value = progress;  // Обновляем значение прогресс бара
+            progressText.innerText = `Обработка видео... ${progress}%`;
+    
+            // Если прогресс 100%, скрываем прогресс бар
+            if (progress >= 100) {
+                progressContainer.style.display = "none";
+            }
+        });
+    
+        // Обработчик отправки формы для загрузки видео от пользователя
+        const form = document.getElementById('video-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();  // Отменяем стандартное поведение формы
+            const fileInput = document.getElementById('video-file');  // Получаем файл из формы
+            const formData = new FormData();  // Создаем объект FormData для отправки данных
+            formData.append('file', fileInput.files[0]);  // Добавляем файл в FormData
+    
+            // Показываем прогресс-бар
+            progressContainer.style.display = "block";
+            progressBar.value = 0;  // Сбрасываем прогресс
+            progressText.innerText = "Обработка видео... 0%";
+    
+            // Отправляем видео на сервер
+            fetch('/upload_video', {
+                method: 'POST',
+                body: formData,  // Отправляем данные в виде multipart
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    document.getElementById('status').innerText = 'Видео успешно загружено!';
+                    let videoPath = '/static/' + data.video_path;
+    
+                    // Подключаем видео плеер только после завершения обработки
+                    videoSource.src = videoPath;  // Путь к видео
+                    videoPlayer.load();  // Загружаем видео
+                    videoPlayer.oncanplaythrough = function() {
+                        videoPlayer.play();  // Запускаем видео
+                    };
+                } else {
+                    document.getElementById('status').innerText = 'Ошибка при загрузке видео.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'Произошла ошибка при загрузке видео.';
+            });
+        });
+    
+    </script>
+    
+</body>
+</html>
