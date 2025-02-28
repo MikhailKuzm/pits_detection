@@ -4,7 +4,7 @@ model: nets/YOLO/yolo11n.yaml
 data: nets/YOLO/data.yaml
 epochs: 150
 time: null
-patience: 50
+patience: 25
 batch: 32
 imgsz: 640
 save: true

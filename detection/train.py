@@ -39,7 +39,7 @@ def train(cfg: DictConfig):
                 os.makedirs(f'logs/yolo11', exist_ok = True) 
                 # Train the model
                 model.train(data="nets/YOLO/data.yaml", epochs=cfg.trainer.epochs, imgsz=640, batch = cfg.dataloader.batch_size,
-                                mosaic = 0, patience = 50, erasing = 0, shear = 0.1, name = f'extra_[depth_{depth}-width_{width}]',
+                                mosaic = 0, patience = 25, erasing = 0, shear = 0.1, name = f'extra13_[depth_{depth}-width_{width}]',
                                 device = [0, 1,2,3,4,5, 6, 7], project = f'logs/yolo11')
         return        
     
